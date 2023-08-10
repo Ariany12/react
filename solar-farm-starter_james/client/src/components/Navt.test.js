@@ -1,43 +1,47 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import Header from './Header';
 import Nav from './Nav';
 
-describe('Nav', () => {
-  const renderComponent = () => {
-    render(
-      <MemoryRouter>
-        <Nav />
-      </MemoryRouter>
-    );
-  };
+function renderComponent() {
+  render(
+    <MemoryRouter>
+      <Nav />
+    </MemoryRouter>
+  );
+}
 
+describe('Nav', () => {
   it('should render three links', () => {
     renderComponent();
 
-    // Act
     const listItemElements = screen.getAllByRole('listitem');
 
-    // Assert
     expect(listItemElements).toHaveLength(3);
   });
 
   it('should render home, view panels, and add panel links', () => {
     renderComponent();
 
-    // Act
-    const homeLink = screen.getByRole('link', { name: /home/i });
-    const viewPanelsLink = screen.getByRole('link', { name: /view panels/i });
-    const addPanelLink = screen.getByRole('link', { name: /add a panel/i });
+    // screen.debug();
+    // screen.logTestingPlaygroundURL();
 
-    // Assert
-    expect(homeLink).toBeInTheDocument();
-    expect(homeLink).toHaveAttribute('href', '/');
+    const homeLinkElement = screen.getByRole('link', {
+      name: /home/i,
+    });
+    const viewPanelsLinkElement = screen.getByRole('link', {
+      name: /view panels/i,
+    });
+    const addPanelLinkElement = screen.getByRole('link', {
+      name: /add a panel/i,
+    });
 
-    expect(viewPanelsLink).toBeInTheDocument();
-    expect(viewPanelsLink).toHaveAttribute('href', '/list');
+    const assertLink = (element, path) => {
+      expect(element).toBeInTheDocument();
+      expect(element).toHaveAttribute('href', path);
+    };
 
-    expect(addPanelLink).toBeInTheDocument();
-    expect(addPanelLink).toHaveAttribute('href', '/add');
+    assertLink(homeLinkElement, '/');
+    assertLink(viewPanelsLinkElement, '/list');
+    assertLink(addPanelLinkElement, '/add');
   });
 });

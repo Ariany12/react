@@ -3,16 +3,16 @@ import Errors from './Errors';
 
 describe('Errors', () => {
   it('should render a list item for each provided error', () => {
-    // ARRANGE
     const errors = ['Error message 1', 'Error message 2'];
 
+    // Arrange
     render(<Errors errors={errors} />);
 
-    // ACT
-    const messageElement = screen.getByText(/The following errors were found/i);
+    // Act
+    const messageElement = screen.getByText(/the following errors were found/i);
     const listItemElements = screen.getAllByRole('listitem');
 
-    // ASSERT
+    // Assert
     expect(messageElement).toBeInTheDocument();
     expect(listItemElements).toHaveLength(2);
 
@@ -24,6 +24,16 @@ describe('Errors', () => {
 
   it('should not render content if there are no error messages', () => {
     const { container } = render(<Errors errors={[]} />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('should not render content is passed an unexpected data type', () => {
+    const { container } = render(<Errors errors={{}} />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('should not render content is passed no props', () => {
+    const { container } = render(<Errors />);
     expect(container).toBeEmptyDOMElement();
   });
 });
